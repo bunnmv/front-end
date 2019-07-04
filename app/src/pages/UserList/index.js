@@ -9,7 +9,7 @@ export default class UserList extends Component {
         this.refreshList();
     }
     refreshList = () => {
-        userService.getUsers.then((res) => {
+        userService.getUsers().then((res) => {
             console.log(res.data);
             this.setState({ userList: res.data })
         }).catch(err => console.log(err));

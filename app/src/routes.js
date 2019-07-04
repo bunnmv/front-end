@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch,Link} from 'react-router-dom';
 import UserList from './pages/UserList';
+import UserCreate from './pages/UserCreate';
 import UserDetail from './pages/UserDetail';
 import logo from './assets/logo.png';
 
@@ -27,7 +28,7 @@ const Routes = () => (
         <Switch>
             <Route path="/" exact component={UserList}/>
             <Route path="/user/:id" component={UserDetail}/>
-            <Route path="/create" component={UserDetail}/>
+            <Route path="/create" component={UserCreate}/>
         </Switch>
         </div>
     </BrowserRouter>
