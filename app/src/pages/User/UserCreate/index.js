@@ -78,22 +78,14 @@ export default class UserCreate extends Component {
     }
 
     handlePhoneChange(phones){
-        console.log(phones);
         this.setState({
-            ...this.state.user,
-            ...this.state.addresses,
-            ...this.state.phones,
-            phones:phones
+            phones: phones,
         });
     }
 
     handleAddressChange(addresses){
-        console.log(addresses);
         this.setState({
-            ...this.state.user,
-            ...this.state.addresses,
-            ...this.state.phones,
-            addresses: addresses
+            addresses: addresses,
         });
     }
 
@@ -102,7 +94,7 @@ export default class UserCreate extends Component {
         console.log('Form submitted:', this.state);
         userService.createUser({user: this.state.user}).then((res) => {
             console.log('NEW USER',res.data);
-            const userID = res.data.user;
+            const userID = res.data.user.id;
             phoneService.createPhone(userID,{phone:this.state.phones[0]}).then((res) => {
                 console.log('NEW PHONE',res.data);
             }).catch(err => console.log(err));

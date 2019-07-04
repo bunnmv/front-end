@@ -7,7 +7,7 @@ export default class PhoneCreate extends Component {
         this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this);// binds the function to the class
     }
     onChangePhoneNumber(e) {
-        this.props.phones.number = e.target.value;
+        this.props.phones[0].number = e.target.value;
         this.props.onPhoneChange(this.props.phones);
     }
 
@@ -23,7 +23,7 @@ export default class PhoneCreate extends Component {
                     <input
                         type="text"
                         className="form-control"
-                        value={phones.number || ''}
+                        value={phones[0].number || ''}
                         onChange={this.onChangePhoneNumber}
                     />
                 </div>

@@ -75,29 +75,29 @@ export default class AddressCreate extends Component {
 
     // ... spread operator for Immutable state
     onChangeAddressZipCode(e) {
-        this.props.addresses.zip_code = e.target.value;
+        this.props.addresses[0].zip_code = e.target.value;
         this.props.onAddressChange(this.props.addresses);
     }
 
     onChangeAddressStreet(e) {
-        this.props.addresses.street = e.target.value;
+        this.props.addresses[0].street = e.target.value;
         this.props.onAddressChange(this.props.addresses);
     }
 
     onChangeAddressNumber(e) {
-        this.props.addresses.number = e.target.value;
+        this.props.addresses[0].number = e.target.value;
         this.props.onAddressChange(this.props.addresses);
     }
     onChangeAddressCity(e) {
-        this.props.addresses.city = e.target.value;
+        this.props.addresses[0].city = e.target.value;
         this.props.onAddressChange(this.props.addresses);
     }
     onChangeAddressState(e) {
-        this.props.addresses.state = e.target.value;
+        this.props.addresses[0].state = e.target.value;
         this.props.onAddressChange(this.props.addresses);
     }
     onChangeAddressNeighborhood(e) {
-        this.props.addresses.neighborhood = e.target.value;
+        this.props.addresses[0].neighborhood = e.target.value;
         this.props.onAddressChange(this.props.addresses);
     }
     render() {
@@ -113,7 +113,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses.street || ''}
+                            value={addresses[0].street || ''}
                             onChange={this.onChangeAddressStreet}
                         />
                     </div>
@@ -122,7 +122,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses.number || ''}
+                            value={addresses[0].number || ''}
                             onChange={this.onChangeAddressNumber}
                         />
                     </div>
@@ -133,7 +133,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses.city || ''}
+                            value={addresses[0].city || ''}
                             onChange={this.onChangeAddressCity}
                         />
                     </div>
@@ -142,7 +142,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses.neighborhood || ''}
+                            value={addresses[0].neighborhood || ''}
                             onChange={this.onChangeAddressNeighborhood}
                         />
                     </div>
@@ -153,7 +153,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses.state || ''}
+                            value={addresses[0].state || ''}
                             onChange={this.onChangeAddressState}
                         />
                     </div>
@@ -162,7 +162,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses.zip_code || ''}
+                            value={addresses[0].zip_code || ''}
                             onChange={this.onChangeAddressZipCode}
                         />
                     </div>
