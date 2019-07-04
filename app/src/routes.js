@@ -10,7 +10,7 @@ const Routes = () => (
         <div className="container router-container">
             <nav className="navbar navbar-expand-lg navbar-light router-navbar-bg">
                 <a className="navbar-brand" href="https://github.com/bunnmv/fullstack" rel="noopener noreferrer" target="_blank">
-                    <img src={logo} width="30" height="30" alt="logo"/>
+                    <img src={logo} width="40" height="40" alt="logo"/>
                 </a>
                 <Link to="/" className="navbar-brand">CRUD Usuário</Link>
                 <div className="collpase navbar-collapse">
