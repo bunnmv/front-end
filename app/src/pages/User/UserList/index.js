@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import userService from '../../services/user.service';
+import userService from '../../../services/user.service';
 import { Link } from 'react-router-dom';
 import moment from "moment";
 import 'moment/locale/pt-br'

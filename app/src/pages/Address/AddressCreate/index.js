@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import addressService from '../../services/address.service';
 import './styles.css';
 export default class AddressCreate extends Component {
 
@@ -79,7 +78,7 @@ export default class AddressCreate extends Component {
         return (
             <div>
                 <div className="address-title">
-                    <h4>Endereço</h4>
+                    <h4>Endereços</h4>
                 </div>
                 <div className="row">
                     <div className="form-group col-sm-10">

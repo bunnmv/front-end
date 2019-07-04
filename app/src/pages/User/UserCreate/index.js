@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import userService from '../../services/user.service';
-import AddressCreate from '../AddressCreate'
+import userService from '../../../services/user.service';
+import AddressCreate from '../../Address/AddressCreate'
+import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
+export default class UserCreate extends Component {
 
-export default class UserEdit extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
         this.onChangeUserName = this.onChangeUserName.bind(this); // binds the function to the class
@@ -21,18 +22,6 @@ export default class UserEdit extends Component {
             }
         }
     }
-
-    componentDidMount() {
-        const id =this.props.match.params.id; // User ID from router params
-        this.getUser(id);
-    }
-
-    getUser = (id) => {
-        userService.getUser(id).then((res) => {
-            console.log(res.data);
-            this.setState({ user: res.data })
-        }).catch(err => console.log(err));
-    };
 
     // ... spread operator for Immutable state
     onChangeUserName(e) {
@@ -83,7 +72,7 @@ export default class UserEdit extends Component {
             <div className="user-create-component">
                 <div className="row justify-content-center">
                     <div className="col-sm-8 ">
-                        <h3>Editar Usuário <small>{this.state.user.name}</small></h3>
+                        <h3>Novo Usuário</h3>
                         <div className="card card-user">
                             <div className="card-body">
                                 <form onSubmit={this.onSubmit}>
@@ -124,9 +113,10 @@ export default class UserEdit extends Component {
                                         />
                                     </div>
                                     {/* Pass handlers and values*/}
+                                    <PhoneCreate/>
                                     <AddressCreate/>
                                     <div className="form-group">
-                                        <input type="submit" value="Editar" className="btn btn-primary" />
+                                        <input type="submit" value="Adicionar" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>

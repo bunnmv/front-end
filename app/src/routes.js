@@ -1,8 +1,8 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch,Link} from 'react-router-dom';
-import UserList from './pages/UserList';
-import UserCreate from './pages/UserCreate';
-import UserEdit from './pages/UserEdit';
+import UserList from './pages/User/UserList';
+import UserCreate from './pages/User/UserCreate';
+import UserEdit from './pages/User/UserEdit';
 import logo from './assets/logo.png';
 
 const Routes = () => (
