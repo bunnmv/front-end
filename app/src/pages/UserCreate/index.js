@@ -3,8 +3,8 @@ import userService from '../../services/user.service';
 export default class UserCreate extends Component {
 
     constructor(props) {
-        super(props);
-        this.onChangeUserName = this.onChangeUserName.bind(this);
+        super(props); // creates the "this" to class and allow this.state
+        this.onChangeUserName = this.onChangeUserName.bind(this); // binds the function to the class
         this.onChangeUserEmail = this.onChangeUserEmail.bind(this);
         this.onChangeUserCPF = this.onChangeUserCPF.bind(this);
         this.onChangeUserBirthDate = this.onChangeUserBirthDate.bind(this);
@@ -51,25 +51,17 @@ export default class UserCreate extends Component {
         this.setState({
             user: {
                 ...this.state.user,
-                date: e.target.value
+                birth_date: e.target.value
             }
         });
     }
 
     onSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
-
         userService.createUser(this.state).then((res) => {
             console.log(res.data);
         }).catch(err => console.log(err));
-
-        // this.setState({
-        //     todo_description: '',
-        //     todo_responsible: '',
-        //     todo_priority: '',
-        //     todo_completed: false
-        // })
     }
 
     render() {
