@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import userService from '../../../services/user.service';
+import phoneService from '../../../services/phone.service';
+import addressService from '../../../services/address.service';
 import AddressCreate from '../../Address/AddressCreate'
 import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
@@ -23,19 +25,19 @@ export default class UserCreate extends Component {
                 name: '',
                 email: '',
                 birth_date: '',
-                cpf:'',
-                phones:[{
-                    number:''
-                }],
-                addresses:[{
-                    zip_code: '',
-                    street: '',
-                    number: '',
-                    city:'',
-                    state:'',
-                    neighborhood:''
-                }]
-            }
+                cpf:''
+            },
+            phones:[{
+                number:''
+            }],
+            addresses:[{
+                zip_code: '',
+                street: '',
+                number: '',
+                city:'',
+                state:'',
+                neighborhood:''
+            }]
         }
     }
 
@@ -78,34 +80,41 @@ export default class UserCreate extends Component {
     handlePhoneChange(phones){
         console.log(phones);
         this.setState({
-            user: {
-                ...this.state.user,
-                phones:phones
-            }
+            ...this.state.user,
+            ...this.state.addresses,
+            ...this.state.phones,
+            phones:phones
         });
     }
 
     handleAddressChange(addresses){
         console.log(addresses);
         this.setState({
-            user: {
-                ...this.state.user,
-                addresses: addresses
-            }
+            ...this.state.user,
+            ...this.state.addresses,
+            ...this.state.phones,
+            addresses: addresses
         });
     }
 
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
-        userService.createUser(this.state).then((res) => {
-            console.log(res.data);
+        userService.createUser({user: this.state.user}).then((res) => {
+            console.log('NEW USER',res.data);
+            const userID = res.data.user;
+            phoneService.createPhone(userID,{phone:this.state.phones[0]}).then((res) => {
+                console.log('NEW PHONE',res.data);
+            }).catch(err => console.log(err));
+            addressService.createAddress(userID,{address:this.state.addresses[0]}).then((res) => {
+                console.log('NEW ADDRESS',res.data);
+            }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }
 
     render() {
-        const phones = this.state.user.phones;
-        const addresses = this.state.user.addresses;
+        const phones = this.state.phones;
+        const addresses = this.state.addresses;
         return (
             <div className="user-create-component">
                 <div className="row justify-content-center">

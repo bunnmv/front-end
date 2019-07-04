@@ -7,6 +7,6 @@ const api = axios.create({
 const addressService = {};
 
 addressService.createAddress = (user,params) => {
-   return api.post(`user/${user}/address/create/`, params);
+   return api.post(`user/${user}/address/create`, params);
 };
 export default addressService;

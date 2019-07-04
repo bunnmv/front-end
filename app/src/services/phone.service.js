@@ -7,6 +7,6 @@ const api = axios.create({
 const phoneService = {};
 
 phoneService.createPhone = (user,params) => {
-   return api.post(`user/${user}/phone/create/`, params);
+   return api.post(`user/${user}/phone/create`, params);
 };
 export default phoneService;
