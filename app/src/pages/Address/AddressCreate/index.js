@@ -10,7 +10,6 @@ export default class AddressCreate extends Component {
         this.onChangeAddressCity = this.onChangeAddressCity.bind(this);
         this.onChangeAddressState = this.onChangeAddressState.bind(this);
         this.onChangeAddressNeighborhood = this.onChangeAddressNeighborhood.bind(this);
-
         this.state = { address: {
                 zip_code: '',
                 street: '',
@@ -22,59 +21,87 @@ export default class AddressCreate extends Component {
         }
     }
 
+    // // ... spread operator for Immutable state
+    // onChangeAddressZipCode(e) {
+    //     this.setState({
+    //         address: {
+    //             ...this.state.address,
+    //             zip_code: e.target.value
+    //         }
+    //     });
+    // }
+    //
+    // onChangeAddressStreet(e) {
+    //     this.setState({
+    //         address: {
+    //             ...this.state.user,
+    //             street: e.target.value
+    //         }
+    //     });
+    // }
+    //
+    // onChangeAddressNumber(e) {
+    //     this.setState({
+    //         address: {
+    //             ...this.state.address,
+    //             number: e.target.value
+    //         }
+    //     });
+    // }
+    // onChangeAddressCity(e) {
+    //     this.setState({
+    //         address: {
+    //             ...this.state.address,
+    //             city: e.target.value
+    //         }
+    //     });
+    // }
+    // onChangeAddressState(e) {
+    //     this.setState({
+    //         address: {
+    //             ...this.state.address,
+    //             state: e.target.value
+    //         }
+    //     });
+    // }
+    // onChangeAddressNeighborhood(e) {
+    //     this.setState({
+    //         address: {
+    //             ...this.state.address,
+    //             neighborhood: e.target.value
+    //         }
+    //     });
+    // }
+
     // ... spread operator for Immutable state
     onChangeAddressZipCode(e) {
-        this.setState({
-            address: {
-                ...this.state.address,
-                zip_code: e.target.value
-            }
-        });
+        this.props.addresses.zip_code = e.target.value;
+        this.props.onAddressChange(this.props.addresses);
     }
 
     onChangeAddressStreet(e) {
-        this.setState({
-            address: {
-                ...this.state.user,
-                street: e.target.value
-            }
-        });
+        this.props.addresses.street = e.target.value;
+        this.props.onAddressChange(this.props.addresses);
     }
 
     onChangeAddressNumber(e) {
-        this.setState({
-            address: {
-                ...this.state.address,
-                number: e.target.value
-            }
-        });
+        this.props.addresses.number = e.target.value;
+        this.props.onAddressChange(this.props.addresses);
     }
     onChangeAddressCity(e) {
-        this.setState({
-            address: {
-                ...this.state.address,
-                city: e.target.value
-            }
-        });
+        this.props.addresses.city = e.target.value;
+        this.props.onAddressChange(this.props.addresses);
     }
     onChangeAddressState(e) {
-        this.setState({
-            address: {
-                ...this.state.address,
-                state: e.target.value
-            }
-        });
+        this.props.addresses.state = e.target.value;
+        this.props.onAddressChange(this.props.addresses);
     }
     onChangeAddressNeighborhood(e) {
-        this.setState({
-            address: {
-                ...this.state.address,
-                neighborhood: e.target.value
-            }
-        });
+        this.props.addresses.neighborhood = e.target.value;
+        this.props.onAddressChange(this.props.addresses);
     }
-
     render() {
+        const addresses = this.props.addresses;
         return (
             <div>
                 <div className="address-title">
@@ -86,7 +113,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.address.street || ''}
+                            value={addresses.street || ''}
                             onChange={this.onChangeAddressStreet}
                         />
                     </div>
@@ -95,7 +122,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.address.number || ''}
+                            value={addresses.number || ''}
                             onChange={this.onChangeAddressNumber}
                         />
                     </div>
@@ -106,7 +133,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.address.city || ''}
+                            value={addresses.city || ''}
                             onChange={this.onChangeAddressCity}
                         />
                     </div>
@@ -115,7 +142,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.address.neighborhood || ''}
+                            value={addresses.neighborhood || ''}
                             onChange={this.onChangeAddressNeighborhood}
                         />
                     </div>
@@ -126,7 +153,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.address.state || ''}
+                            value={addresses.state || ''}
                             onChange={this.onChangeAddressState}
                         />
                     </div>
@@ -135,7 +162,7 @@ export default class AddressCreate extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.address.zip_code || ''}
+                            value={addresses.zip_code || ''}
                             onChange={this.onChangeAddressZipCode}
                         />
                     </div>

@@ -12,13 +12,29 @@ export default class UserCreate extends Component {
         this.onChangeUserCPF = this.onChangeUserCPF.bind(this);
         this.onChangeUserBirthDate = this.onChangeUserBirthDate.bind(this);
 
+        this.handleAddressChange=this.handleAddressChange.bind(this);
+        this.handlePhoneChange=this.handlePhoneChange.bind(this);
+
         this.onSubmit = this.onSubmit.bind(this);
 
-        this.state = { user: {
+
+        this.state = {
+            user: {
                 name: '',
                 email: '',
                 birth_date: '',
-                cpf:''
+                cpf:'',
+                phones:[{
+                    number:''
+                }],
+                addresses:[{
+                    zip_code: '',
+                    street: '',
+                    number: '',
+                    city:'',
+                    state:'',
+                    neighborhood:''
+                }]
             }
         }
     }
@@ -59,6 +75,26 @@ export default class UserCreate extends Component {
         });
     }
 
+    handlePhoneChange(phones){
+        console.log(phones);
+        this.setState({
+            user: {
+                ...this.state.user,
+                phones:phones
+            }
+        });
+    }
+
+    handleAddressChange(addresses){
+        console.log(addresses);
+        this.setState({
+            user: {
+                ...this.state.user,
+                addresses: addresses
+            }
+        });
+    }
+
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
@@ -68,6 +104,8 @@ export default class UserCreate extends Component {
     }
 
     render() {
+        const phones = this.state.user.phones;
+        const addresses = this.state.user.addresses;
         return (
             <div className="user-create-component">
                 <div className="row justify-content-center">
@@ -113,10 +151,10 @@ export default class UserCreate extends Component {
                                         />
                                     </div>
                                     {/* Pass handlers and values*/}
-                                    <PhoneCreate/>
-                                    <AddressCreate/>
+                                    <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
+                                    <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
-                                        <input type="submit" value="Adicionar" className="btn btn-primary" />
+                                        <input type="submit" value="Criar Usuário" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>

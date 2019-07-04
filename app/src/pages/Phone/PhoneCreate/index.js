@@ -5,22 +5,14 @@ export default class PhoneCreate extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
         this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this);// binds the function to the class
-        this.state = { phone: {
-                number: ''
-            }
-        }
     }
-    // ... spread operator for Immutable state
     onChangePhoneNumber(e) {
-        this.setState({
-            phone: {
-                ...this.state.phone,
-                number: e.target.value
-            }
-        });
+        this.props.phones.number = e.target.value;
+        this.props.onPhoneChange(this.props.phones);
     }
 
     render() {
+        const phones = this.props.phones;
         return (
             <div>
                 <div className="address-title">
@@ -31,7 +23,7 @@ export default class PhoneCreate extends Component {
                     <input
                         type="text"
                         className="form-control"
-                        value={this.state.phone.number || ''}
+                        value={phones.number || ''}
                         onChange={this.onChangePhoneNumber}
                     />
                 </div>
