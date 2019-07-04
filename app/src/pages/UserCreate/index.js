@@ -112,12 +112,12 @@ export default class UserCreate extends Component {
                                         onChange={this.onChangeUserBirthDate}
                                     />
                                 </div>
+                                {/* Pass handlers and values*/}
+                                <AddressCreate/>
                                 <div className="form-group">
                                     <input type="submit" value="Adicionar" className="btn btn-primary" />
                                 </div>
                             </form>
-                            <AddressCreate/>
-                            {/* Pass User Id to address Create*/}
                         </div>
                     </div>
                 </div>

@@ -5,114 +5,142 @@ export default class AddressCreate extends Component {
 
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
-        this.onChangeUserName = this.onChangeUserName.bind(this); // binds the function to the class
-        this.onChangeUserEmail = this.onChangeUserEmail.bind(this);
-        this.onChangeUserCPF = this.onChangeUserCPF.bind(this);
-        this.onChangeUserBirthDate = this.onChangeUserBirthDate.bind(this);
+        this.onChangeAddressZipCode = this.onChangeAddressZipCode.bind(this); // binds the function to the class
+        this.onChangeAddressStreet = this.onChangeAddressStreet.bind(this);
+        this.onChangeAddressNumber = this.onChangeAddressNumber.bind(this);
+        this.onChangeAddressCity = this.onChangeAddressCity.bind(this);
+        this.onChangeAddressState = this.onChangeAddressState.bind(this);
+        this.onChangeAddressNeighborhood = this.onChangeAddressNeighborhood.bind(this);
 
-        this.onSubmit = this.onSubmit.bind(this);
-
-        this.state = { user: {
-                name: '',
-                email: '',
-                birth_date: '',
-                cpf:''
+        this.state = { address: {
+                zip_code: '',
+                street: '',
+                number: '',
+                city:'',
+                state:'',
+                neighborhood:''
             }
         }
     }
 
     // ... spread operator for Immutable state
-    onChangeUserName(e) {
+    onChangeAddressZipCode(e) {
         this.setState({
-            user: {
-                ...this.state.user,
-                name: e.target.value
+            address: {
+                ...this.state.address,
+                zip_code: e.target.value
             }
         });
     }
 
-    onChangeUserEmail(e) {
+    onChangeAddressStreet(e) {
         this.setState({
-            user: {
+            address: {
                 ...this.state.user,
-                email: e.target.value
+                street: e.target.value
             }
         });
     }
 
-    onChangeUserCPF(e) {
+    onChangeAddressNumber(e) {
         this.setState({
-            user: {
-                ...this.state.user,
-                cpf: e.target.value
+            address: {
+                ...this.state.address,
+                number: e.target.value
             }
         });
     }
-    onChangeUserBirthDate(e) {
+    onChangeAddressCity(e) {
         this.setState({
-            user: {
-                ...this.state.user,
-                birth_date: e.target.value
+            address: {
+                ...this.state.address,
+                city: e.target.value
             }
         });
     }
-
-    onSubmit(e) {
-        e.preventDefault(); // prevents form from redirecting
-        console.log('Form submitted:', this.state);
-        const user = 2; // todo get correct user ID
-        addressService.createAddress(user,this.state).then((res) => {
-            console.log(res.data);
-        }).catch(err => console.log(err));
+    onChangeAddressState(e) {
+        this.setState({
+            address: {
+                ...this.state.address,
+                state: e.target.value
+            }
+        });
+    }
+    onChangeAddressNeighborhood(e) {
+        this.setState({
+            address: {
+                ...this.state.address,
+                neighborhood: e.target.value
+            }
+        });
     }
 
     render() {
         return (
             <div>
                 <div className="address-title">
-                    <h4 >Endereço</h4>
+                    <h4>Endereço</h4>
                 </div>
-                <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <label>Nome: </label>
+                <div className="row">
+                    <div className="form-group col-sm-10">
+                        <label>Rua: </label>
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.user.name || ''}
-                            onChange={this.onChangeUserName}
+                            value={this.state.address.street || ''}
+                            onChange={this.onChangeAddressStreet}
                         />
                     </div>
-                    <div className="form-group">
-                        <label>E-mail: </label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            value={this.state.user.email || ''}
-                            onChange={this.onChangeUserEmail}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>CPF: </label>
+                    <div className="form-group col-sm-2">
+                        <label>Número: </label>
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.user.cpf || ''}
-                            onChange={this.onChangeUserCPF}
+                            value={this.state.address.number || ''}
+                            onChange={this.onChangeAddressNumber}
                         />
                     </div>
-                    <div className="form-group">
-                        <label>Data de Nascimento: </label>
+                </div>
+                <div className="row">
+                    <div className="form-group col-sm-6">
+                        <label>Cidade: </label>
                         <input
-                            type="date"
+                            type="text"
                             className="form-control"
-                            value={this.state.user.birth_date || ''}
-                            onChange={this.onChangeUserBirthDate}
+                            value={this.state.address.city || ''}
+                            onChange={this.onChangeAddressCity}
                         />
                     </div>
-                    <div className="form-group">
-                        <input type="submit" value="Adicionar" className="btn btn-primary" />
+                    <div className="form-group col-sm-6">
+                        <label>Bairro: </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={this.state.address.neighborhood || ''}
+                            onChange={this.onChangeAddressNeighborhood}
+                        />
                     </div>
-                </form>
+                </div>
+                <div className="row">
+                    <div className="form-group col-sm-8">
+                        <label>Estado: </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={this.state.address.state || ''}
+                            onChange={this.onChangeAddressState}
+                        />
+                    </div>
+                    <div className="form-group col-sm-4">
+                        <label>CEP: </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={this.state.address.zip_code || ''}
+                            onChange={this.onChangeAddressZipCode}
+                        />
+                    </div>
+                </div>
             </div>
         )
     }
