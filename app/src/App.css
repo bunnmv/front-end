@@ -26,5 +26,6 @@ body .router-container {
 }
 
 body .router-navbar-bg {
-  background-color: gold;
+  background-color: white;
+  box-shadow: 10px 5px 5px lightslategrey ;
 }
