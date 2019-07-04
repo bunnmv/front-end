@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch,Link} from 'react-router-dom';
 import UserList from './pages/UserList';
 import UserCreate from './pages/UserCreate';
-import UserDetail from './pages/UserDetail';
+import UserEdit from './pages/UserEdit';
 import logo from './assets/logo.png';
 
 const Routes = () => (
@@ -27,7 +27,7 @@ const Routes = () => (
             <br/>
         <Switch>
             <Route path="/" exact component={UserList}/>
-            <Route path="/user/:id" component={UserDetail}/>
+            <Route path="/user/edit/:id" component={UserEdit}/>
             <Route path="/create" component={UserCreate}/>
         </Switch>
         </div>
