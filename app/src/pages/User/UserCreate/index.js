@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import userService from '../../../services/user.service';
 import './styles.css';
 import MaskedInput from 'react-text-mask'
-import moment from "../UserEdit";
-
 const ErrorMessage = () => (
     <div className="error-message">
         <p>CPF Inválido</p>
