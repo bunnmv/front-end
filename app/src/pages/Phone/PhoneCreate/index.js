@@ -35,7 +35,7 @@ export default class PhoneCreate extends Component {
                         {/*    onChange={this.onChangePhoneNumber}*/}
                         {/*/>*/}
                         <MaskedInput
-                            mask={['(',/[1-9]/,/[1-9]/,')', ' ', /[1-9]/,' ',/[1-9]/, /\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
+                            mask={['(',/[1-9]/,/[1-9]/,')', ' ', /[1-9]/,' ',/[1-9]/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
                             className="form-control"
                             placeholder="(48) 9 9654-8776"
                             guide={false}
@@ -52,7 +52,7 @@ export default class PhoneCreate extends Component {
                         {/*    onChange={this.onChangePhoneNumber}*/}
                         {/*/>*/}
                         <MaskedInput
-                            mask={['(',/[1-9]/,/[1-9]/,')',' ',/[1-9]/, /\d/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
+                            mask={['(',/[1-9]/,/[1-9]/,')',' ',/[1-9]/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
                             className="form-control"
                             placeholder="(48) 3443-8776"
                             guide={false}

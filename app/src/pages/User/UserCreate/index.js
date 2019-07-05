@@ -20,7 +20,6 @@ export default class UserCreate extends Component {
 
         this.onSubmit = this.onSubmit.bind(this);
 
-
         this.state = {
             user: {
                 name: '',
@@ -29,7 +28,8 @@ export default class UserCreate extends Component {
                 cpf:''
             },
             phones:[{
-                number:''
+                mobile:'',
+                home:'',
             }],
             addresses:[{
                 zip_code: '',
@@ -70,12 +70,28 @@ export default class UserCreate extends Component {
         });
     }
     onChangeUserBirthDate(e) {
-        this.setState({
-            user: {
-                ...this.state.user,
-                birth_date: e.target.value
-            }
-        });
+        if(e.target.value.length===10){ // 10 chars for date string dd/mm/yyyy
+            let parts = e.target.value.split('/');
+            console.log('parts',parts);
+            let day = parts[0];
+            let aux_number_day = Number(day)+1; // date hast to increase by one because index starts with 0
+            aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
+            const birth_date = parts[2] + '-' + parts[1] + '-' + day;
+            console.log('birth_date',birth_date);
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    birth_date: birth_date
+                }
+            });
+        } else {
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    birth_date: e.target.value
+                }
+            });
+        }
     }
 
     handlePhoneChange(phones){
@@ -90,6 +106,7 @@ export default class UserCreate extends Component {
         });
     }
 
+
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
@@ -103,6 +120,8 @@ export default class UserCreate extends Component {
                 console.log('NEW ADDRESS',res.data);
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
+
+        this.props.history.push('/'); // redirect back to user list
     }
 
     render() {

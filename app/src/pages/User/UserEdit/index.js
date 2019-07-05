@@ -28,7 +28,8 @@ export default class UserCreate extends Component {
                 cpf:''
             },
             phones:[{
-                number:''
+                mobile:'',
+                home:'',
             }],
             addresses:[{
                 zip_code: '',

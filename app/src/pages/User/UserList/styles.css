@@ -1,0 +1,21 @@
+.link-button{
+    border:none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 1em;
+}
+.link-button:hover{
+    color: #0056b3;
+    text-decoration: underline;
+}
+.ops-row{
+    font-size: 14px;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.message-container{
+    margin-top: 10%;
+}
