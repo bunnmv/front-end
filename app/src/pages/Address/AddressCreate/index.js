@@ -191,7 +191,7 @@ export default class AddressCreate extends Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="form-group col-sm-4">
+                                        <div className="form-group col-sm-6">
                                             <label>Bairro: </label>
                                             <input
                                                 type="text"

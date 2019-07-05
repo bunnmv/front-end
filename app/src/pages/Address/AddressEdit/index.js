@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import './styles.css';
 import MaskedInput from 'react-text-mask'
 import addressService from "../../../services/address.service";
+import cep from 'cep-promise';
+
+const ErrorMessage = () => (
+    <div className="error-message">
+        <p>Obrigatório</p>
+    </div>
+);
 export default class AddressEdit extends Component {
 
     constructor(props) {
@@ -13,7 +20,9 @@ export default class AddressEdit extends Component {
         this.onChangeAddressState = this.onChangeAddressState.bind(this);
         this.onChangeAddressNeighborhood = this.onChangeAddressNeighborhood.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.state = { address: {
+        this.state = {
+            emptyNumber:false,
+            address: {
                 zip_code: '',
                 street: '',
                 number: '',
@@ -37,12 +46,29 @@ export default class AddressEdit extends Component {
     };
     // ... spread operator for Immutable state
     onChangeAddressZipCode(e) {
-        this.setState({
-            address: {
-                ...this.state.address,
-                zip_code: e.target.value
-            }
-        });
+        if(e.target.value.length === 9){
+            this.setState({
+                address: {
+                    ...this.state.address,
+                    zip_code: e.target.value
+                }
+            });
+            cep(e.target.value)
+                .then(res => {
+                    this.setState({address: {
+                            ...this.state.address,
+                            street:res.street,
+                            city:res.city,
+                            state:res.state,
+                            neighborhood:res.neighborhood
+                        }});
+                    if(this.state.address.number === ''){
+                        this.setState({emptyNumber:true});
+                    } else {
+                        this.setState({emptyNumber:false});
+                    }
+                });
+        }
     }
 
     onChangeAddressStreet(e) {
@@ -61,6 +87,11 @@ export default class AddressEdit extends Component {
                 number: e.target.value
             }
         });
+        if(this.state.address.number === ''){
+            this.setState({emptyNumber:true});
+        } else {
+            this.setState({emptyNumber:false});
+        }
     }
     onChangeAddressCity(e) {
         this.setState({
@@ -87,7 +118,12 @@ export default class AddressEdit extends Component {
         });
     }
     checkDisabledForm(){
-        return this.state.address.zip_code === '' || this.state.address.state === '';
+        return this.state.address.zip_code === '' || this.state.address.number === '';
+    }
+    checkNumberMessage() {
+        if(this.state.emptyNumber){
+            return <ErrorMessage/>
+        }
     }
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
@@ -109,6 +145,20 @@ export default class AddressEdit extends Component {
                             <div className="card-body">
                                 <form onSubmit={this.onSubmit}>
                                     <div className="row">
+                                        <div className="form-group col-sm-4">
+                                            <label>CEP: </label>
+                                            <MaskedInput
+                                                mask={[ /\d/, /\d/,/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/]}
+                                                className="form-control"
+                                                value={this.state.address.zip_code || ''}
+                                                placeholder="Pesquise o CEP"
+                                                guide={false}
+                                                id="zip_code"
+                                                onChange={this.onChangeAddressZipCode}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="row">
                                         <div className="form-group col-sm-10">
                                             <label>Rua: </label>
                                             <input
@@ -129,6 +179,7 @@ export default class AddressEdit extends Component {
                                                 id="number"
                                                 onChange={this.onChangeAddressNumber}
                                             />
+                                            { this.checkNumberMessage() }
                                         </div>
                                     </div>
                                     <div className="row">
@@ -152,7 +203,7 @@ export default class AddressEdit extends Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="form-group col-sm-8">
+                                        <div className="form-group col-sm-6">
                                             <label>Bairro: </label>
                                             <input
                                                 type="text"
@@ -161,21 +212,9 @@ export default class AddressEdit extends Component {
                                                 onChange={this.onChangeAddressNeighborhood}
                                             />
                                         </div>
-                                        <div className="form-group col-sm-4">
-                                            <label>CEP: </label>
-                                            <MaskedInput
-                                                mask={[ /\d/, /\d/,/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/]}
-                                                className="form-control"
-                                                value={this.state.address.zip_code || ''}
-                                                placeholder="CEP"
-                                                guide={false}
-                                                id="zip_code"
-                                                onChange={this.onChangeAddressZipCode}
-                                            />
-                                        </div>
                                     </div>
                                     <div className="form-group">
-                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Alteraçōes" className="btn btn-primary" />
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Alterações" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>
