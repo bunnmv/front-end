@@ -8,7 +8,7 @@ import logo from './assets/logo.png';
 const Routes = () => (
     <BrowserRouter>
         <div className="container router-container">
-            <nav className="navbar navbar-expand-lg navbar-light router-navbar-bg">
+            <nav className="navbar navbar-expand-lg navbar-light router-navbar-bg ">
                 <a className="navbar-brand" href="https://github.com/bunnmv/fullstack" rel="noopener noreferrer" target="_blank">
                     <img src={logo} width="40" height="40" alt="logo"/>
                 </a>

@@ -53,7 +53,7 @@ export default class AddressCreate extends Component {
         return (
             <div>
                 <div className="address-title">
-                    <h4>Endereços</h4>
+                    <h4>Endereço</h4>
                 </div>
                 <div className="row">
                     <div className="form-group col-sm-10">

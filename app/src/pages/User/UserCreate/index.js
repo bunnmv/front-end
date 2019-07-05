@@ -6,6 +6,14 @@ import AddressCreate from '../../Address/AddressCreate'
 import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
 import MaskedInput from 'react-text-mask'
+
+const ErrorMessage = () => (
+    <div className="error-message">
+        <p>CPF Inválido</p>
+    </div>
+);
+
+
 export default class UserCreate extends Component {
 
     constructor(props) {
@@ -21,6 +29,7 @@ export default class UserCreate extends Component {
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
+            cpfInvalid:false,
             user: {
                 name: '',
                 email: '',
@@ -61,14 +70,59 @@ export default class UserCreate extends Component {
         });
     }
 
+    testCPF = (e) => {
+        let cpf = e.replace(/[^\d]/g, "");
+        let sum;
+        let remainder;
+        sum = 0;
+        if (cpf === '00000000000') return false;
+        if (cpf === '11111111111') return false;
+        if (cpf === '22222222222') return false;
+        if (cpf === '33333333333') return false;
+        if (cpf === '44444444444') return false;
+        if (cpf === '55555555555') return false;
+        if (cpf === '66666666666') return false;
+        if (cpf === '77777777777') return false;
+        if (cpf === '88888888888') return false;
+        if (cpf === '99999999999') return false;
+
+        for (let i=1; i<=9; i++) sum = sum + parseInt(cpf.substring(i-1, i)) * (11 - i);
+        remainder = (sum * 10) % 11;
+
+        if ((remainder === 10) || (remainder === 11))  remainder = 0;
+        if (remainder !== parseInt(cpf.substring(9, 10)) ) return false;
+        sum = 0;
+        for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpf.substring(i-1, i)) * (12 - i);
+        remainder = (sum * 10) % 11;
+
+        if ((remainder === 10) || (remainder === 11))  remainder = 0;
+        return remainder === parseInt(cpf.substring(10, 11));
+    };
     onChangeUserCPF(e) {
-        this.setState({
-            user: {
-                ...this.state.user,
-                cpf: e.target.value
+        if(e.target.value.length === 14){
+            if(this.testCPF(e.target.value)){
+                console.log('valid');
+                this.setState({
+                    invalidCPF:false,
+                    user: {
+                        ...this.state.user,
+                        cpf: e.target.value // cpf is valid
+                    }
+                });
+            } else {
+                this.setState({invalidCPF:true});
+                console.log('not valid');
             }
-        });
+        } else {
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    cpf: e.target.value
+                }
+            });
+        }
     }
+
     onChangeUserBirthDate(e) {
         if(e.target.value.length===10){ // 10 chars for date string dd/mm/yyyy
             let parts = e.target.value.split('/');
@@ -106,6 +160,16 @@ export default class UserCreate extends Component {
         });
     }
 
+    checkCPFMessage() {
+        console.log(this.state);
+        if(this.state.invalidCPF){
+            return <ErrorMessage/>
+        }
+    }
+
+    checkDisabledForm(){
+        return this.state.invalidCPF;
+    }
 
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
@@ -123,6 +187,7 @@ export default class UserCreate extends Component {
 
         this.props.history.push('/'); // redirect back to user list
     }
+
 
     render() {
         const phones = this.state.phones;
@@ -171,6 +236,7 @@ export default class UserCreate extends Component {
                                             id="cpf"
                                             onChange={this.onChangeUserCPF}
                                         />
+                                        { this.checkCPFMessage() }
                                     </div>
                                     <div className="form-group">
                                         <label>Data de Nascimento: </label>
@@ -193,7 +259,7 @@ export default class UserCreate extends Component {
                                     <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
                                     <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
-                                        <input type="submit" value="Criar Usuário" className="btn btn-primary" />
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Criar Usuário" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>
