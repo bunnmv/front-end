@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import userService from '../../../services/user.service';
 import './styles.css';
 import MaskedInput from 'react-text-mask'
+import moment from "../UserEdit";
 
 const ErrorMessage = () => (
     <div className="error-message">
@@ -115,27 +116,14 @@ export default class UserCreate extends Component {
     }
 
     onChangeUserBirthDate(e) {
-        if(e.target.value.length===10){ // 10 chars for date string dd/mm/yyyy
-            let parts = e.target.value.split('/');
-            let day = parts[0];
-            let aux_number_day = Number(day)+1; // date hast to increase by one because index starts with 0
-            aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
-            const birth_date = parts[2] + '-' + parts[1] + '-' + day;
-            this.setState({
-                user: {
-                    ...this.state.user,
-                    birth_date: birth_date
-                }
-            });
-        } else {
-            this.setState({
-                user: {
-                    ...this.state.user,
-                    birth_date: e.target.value
-                }
-            });
-        }
+        this.setState({
+            user: {
+                ...this.state.user,
+                birth_date: e.target.value
+            }
+        });
     }
+
     checkCPFMessage() {
         if(this.state.invalidCPF){
             return <ErrorMessage/>
@@ -146,10 +134,21 @@ export default class UserCreate extends Component {
         return this.state.invalidCPF;
     }
 
+    formatBirthDateUS(date){ // format to Date format for DB
+        let parts = date.split('/');
+        let day = parts[0];
+        let aux_number_day = Number(day);
+        aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
+        return parts[2] + '-' + parts[1] + '-' + day;
+    }
+
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
-        console.log('Form submitted:', this.state);
-        userService.createUser({user: this.state.user}).then((res) => {
+        const user = this.state.user;
+        // date has to be formatted back to be saved on DB
+        user.birth_date = this.formatBirthDateUS(this.state.user.birth_date);
+        console.log('Form submitted:',user);
+        userService.createUser({user: user}).then((res) => {
             console.log('NEW USER',res.data);
             this.props.history.push('/'); // redirect back to user list
         }).catch(err => console.log(err));

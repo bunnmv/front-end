@@ -37,8 +37,8 @@ const Routes = () => (
             <Route path="/user/create" component={UserCreate}/>
             <Route path="/user/:user/address/create" component={AddressCreate}/>
             <Route path="/user/:user/phone/create" component={PhoneCreate}/>
-            <Route path="/user/:user/address/edit/id" component={AddressEdit}/>
-            <Route path="/user/:user/phone/edit/id" component={PhoneEdit}/>
+            <Route path="/user/:user/address/edit/:id" component={AddressEdit}/>
+            <Route path="/user/:user/phone/edit/:id" component={PhoneEdit}/>
             <Route path="/user/:user/address/list" component={AddressList}/>
             <Route path="/user/:user/phone/list" component={PhoneList}/>
         </Switch>

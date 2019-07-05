@@ -3,7 +3,6 @@ import './styles.css';
 import MaskedInput from "react-text-mask";
 import phoneService from "../../../services/phone.service";
 
-
 export default class PhoneEdit extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
@@ -17,6 +16,21 @@ export default class PhoneEdit extends Component {
             }
         };
     }
+
+    componentDidMount() {
+        const user =this.props.match.params.user; // User ID from router params
+        const id =this.props.match.params.id; // Phone ID from router params
+        this.getPhone(user,id);
+    }
+
+    getPhone = (user,id) => {
+        phoneService.getPhone(user,id).then((res) => {
+            console.log('Phone',res.data);
+            this.setState({phone:res.data});
+        }).catch(err => console.log(err));
+
+    };
+
     onChangePhoneNumber(e) {
         this.setState({
             phone: {
@@ -24,7 +38,6 @@ export default class PhoneEdit extends Component {
                 number: e.target.value
             }
         });
-        console.log(this.state);
     }
 
     onChangePhoneType(e) {
@@ -77,7 +90,8 @@ export default class PhoneEdit extends Component {
         e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
         const user = this.props.match.params.user; // User ID from router params
-        phoneService.createPhone(user,this.state).then((res) => {
+        const id = this.props.match.params.id; // Phone ID from router params
+        phoneService.editPhone(user,id,this.state).then((res) => {
             console.log('NEW PHONE',res.data);
             this.props.history.push('/user/'+user+'/phone/list'); // redirect back to user list
         }).catch(err => console.log(err));

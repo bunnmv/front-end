@@ -23,6 +23,18 @@ export default class AddressEdit extends Component {
             }
         }
     }
+    componentDidMount() {
+        const id = this.props.match.params.id; // Address ID from router params
+        const user = this.props.match.params.user; // User ID from router params
+        this.getAddress(user,id);
+    }
+
+    getAddress = (user,id) => {
+        addressService.getAddress(user,id).then((res) => {
+            console.log('Address',res.data);
+            this.setState({address:res.data});
+        }).catch(err => console.log(err));
+    };
     // ... spread operator for Immutable state
     onChangeAddressZipCode(e) {
         this.setState({
@@ -81,8 +93,9 @@ export default class AddressEdit extends Component {
         e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
         const user = this.props.match.params.user; // User ID from router params
-        addressService.createAddress(user,this.state).then((res) => {
-            console.log('NEW ADDRESS',res.data);
+        const id = this.props.match.params.id; // Address ID from router params
+        addressService.editAddress(user,id,this.state).then((res) => {
+            console.log('EDIT ADDRESS',res.data);
             this.props.history.push('/user/'+user+'/address/list'); // redirect back to user list
         }).catch(err => console.log(err));
     }
@@ -91,7 +104,7 @@ export default class AddressEdit extends Component {
             <div>
                 <div className="row justify-content-center">
                     <div className="col-sm-8 ">
-                        <h3>Novo Endereço</h3>
+                        <h3>Editar Endereço</h3>
                         <div className="card card-address">
                             <div className="card-body">
                                 <form onSubmit={this.onSubmit}>
@@ -162,7 +175,7 @@ export default class AddressEdit extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group">
-                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Endereço" className="btn btn-primary" />
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Alteraçōes" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>

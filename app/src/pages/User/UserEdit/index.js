@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import userService from '../../../services/user.service';
-import phoneService from '../../../services/phone.service';
-import addressService from '../../../services/address.service';
-import AddressCreate from '../../Address/AddressCreate'
-import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
 import MaskedInput from 'react-text-mask'
 import moment from "moment";
@@ -25,31 +21,17 @@ export default class UserEdit extends Component {
         this.onChangeUserCPF = this.onChangeUserCPF.bind(this);
         this.onChangeUserBirthDate = this.onChangeUserBirthDate.bind(this);
 
-        this.handleAddressChange=this.handleAddressChange.bind(this);
-        this.handlePhoneChange=this.handlePhoneChange.bind(this);
-
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             invalidCPF:false,
+            oldName:'',
             user: {
                 name: '',
                 email: '',
                 birth_date: '',
                 cpf:''
-            },
-            phones:[{
-                mobile:'',
-                home:''
-            }],
-            addresses:[{
-                zip_code: '',
-                street: '',
-                number: '',
-                city:'',
-                state:'',
-                neighborhood:''
-            }]
+            }
         }
     }
 
@@ -61,7 +43,15 @@ export default class UserEdit extends Component {
     getUser = (id) => {
         userService.getUser(id).then((res) => {
             console.log('User',res.data);
-            this.setState({user:res.data.user,addresses:res.data.addresses,phones:res.data.phones});
+            const formattedDate = this.formatBirthDateLocale(res.data.birth_date);
+            this.setState({oldName:res.data.name,user:res.data});
+
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    birth_date: formattedDate
+                }
+            });
         }).catch(err => console.log(err));
 
     };
@@ -137,38 +127,11 @@ export default class UserEdit extends Component {
     }
 
     onChangeUserBirthDate(e) {
-        if(e.target.value.length===10){ // 10 chars for date string dd/mm/yyyy
-            let parts = e.target.value.split('/');
-            let day = parts[0];
-            let aux_number_day = Number(day)+1; // date hast to increase by one because index starts with 0
-            aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
-            const birth_date = parts[2] + '-' + parts[1] + '-' + day;
-            this.setState({
-                user: {
-                    ...this.state.user,
-                    birth_date: birth_date
-                }
-            });
-        } else {
-            this.setState({
-                user: {
-                    ...this.state.user,
-                    birth_date: e.target.value
-                }
-            });
-        }
-    }
-
-    handlePhoneChange(phones){
         this.setState({
-            ...this.state.phones,
-            phones: phones
-        });
-    }
-
-    handleAddressChange(addresses){
-        this.setState({
-            addresses: addresses
+            user: {
+                ...this.state.user,
+                birth_date: e.target.value
+            }
         });
     }
 
@@ -182,30 +145,34 @@ export default class UserEdit extends Component {
         return this.state.invalidCPF;
     }
 
+    formatBirthDateLocale(date){ // format to Brazilian format
+        return moment(date).locale('pt-br').format('L')
+    }
+    formatBirthDateUS(date){ // format to Date format for DB
+        let parts = date.split('/');
+        let day = parts[0];
+        let aux_number_day = Number(day);
+        aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
+        return parts[2] + '-' + parts[1] + '-' + day;
+    }
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
-        console.log('Form submitted:', this.state);
-        userService.editUser(this.state.user.id,{user: this.state.user}).then((res) => {
+        const user = this.state.user;
+        // date has to be formatted back to be saved on DB
+        user.birth_date = this.formatBirthDateUS(this.state.user.birth_date);
+        console.log('Form submitted:',user);
+
+        userService.editUser(this.state.user.id,{user: user}).then((res) => {
             console.log('EDIT USER',res.data);
-            phoneService.editPhone(this.state.user.id,this.state.phones[0].id,{phone:this.state.phones[0]}).then((res) => {
-                console.log('EDIT PHONE',res.data);
-            }).catch(err => console.log(err));
-            addressService.editAddress(this.state.user.id,this.state.addresses[0].id,{address:this.state.addresses[0]}).then((res) => {
-                console.log('EDIT ADDRESS',res.data);
-            }).catch(err => console.log(err));
+            this.props.history.push('/'); // redirect back to user list
         }).catch(err => console.log(err));
-
-        this.props.history.push('/'); // redirect back to user list
     }
-
     render() {
-        const phones = this.state.phones;
-        const addresses = this.state.addresses;
         return (
             <div className="user-create-component">
                 <div className="row justify-content-center">
                     <div className="col-sm-8 ">
-                        <h3>Editar Usuário <small>{this.state.user.name}</small></h3>
+                        <h3>Editar Usuário <small>{this.state.oldName}</small></h3>
                         <div className="card card-user">
                             <div className="card-body">
                                 <form onSubmit={this.onSubmit}>
@@ -250,12 +217,10 @@ export default class UserEdit extends Component {
                                             placeholder="dia/mês/ano"
                                             guide={false}
                                             id="birth_date"
-                                            value={moment(this.state.user.birth_date).locale('pt-br').format('L') || ''}
+                                            value={this.state.user.birth_date || ''}
                                             onChange={this.onChangeUserBirthDate}
                                         />
                                     </div>
-                                    <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
-                                    <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
                                         <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Edições" className="btn btn-primary" />
                                     </div>

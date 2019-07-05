@@ -10,6 +10,10 @@ addressService.getAddresses = (user) => {
    return api.get(`user/${user}/address/list`);
 };
 
+addressService.getAddress= (user,id) => {
+   return api.get(`user/${user}/address/get/${id}`);
+};
+
 addressService.createAddress = (user,params) => {
    return api.post(`user/${user}/address/create`, params);
 };
