@@ -17,13 +17,13 @@ export default class UserList extends Component {
         this.state = {userList: []};
         this.refreshList = this.refreshList.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
-
-    }
-    componentDidMount() {
         this.refreshList();
     }
+    componentDidMount() {
+
+    }
+
     deleteUser(id){
-        console.log('delete', id);
         userService.deleteUser(id).then((res) => {
             console.log(res.data);
             this.refreshList();

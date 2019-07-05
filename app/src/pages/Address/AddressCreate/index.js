@@ -49,7 +49,7 @@ export default class AddressCreate extends Component {
         this.props.onAddressChange(this.props.addresses);
     }
     render() {
-        const addresses = this.props.addresses;
+        const addresses = this.props.addresses? this.props.addresses:[{}];
         return (
             <div>
                 <div className="address-title">
@@ -67,17 +67,12 @@ export default class AddressCreate extends Component {
                     </div>
                     <div className="form-group col-sm-2">
                         <label>Número: </label>
-                        {/*<input*/}
-                        {/*    type="text"*/}
-                        {/*    className="form-control"*/}
-                        {/*    value={addresses[0].number || ''}*/}
-                        {/*    onChange={this.onChangeAddressNumber}*/}
-                        {/*/>*/}
                         <MaskedInput
                             mask={[ /[1-9]/, /\d/,/\d/, /\d/, /\d/]}
                             className="form-control"
                             placeholder="N•"
                             guide={false}
+                            value={addresses[0].number || ''}
                             id="number"
                             onChange={this.onChangeAddressNumber}
                         />
@@ -115,15 +110,10 @@ export default class AddressCreate extends Component {
                     </div>
                     <div className="form-group col-sm-4">
                         <label>CEP: </label>
-                        {/*<input*/}
-                        {/*    type="text"*/}
-                        {/*    className="form-control"*/}
-                        {/*    value={addresses[0].zip_code || ''}*/}
-                        {/*    onChange={this.onChangeAddressZipCode}*/}
-                        {/*/>*/}
                         <MaskedInput
                             mask={[ /\d/, /\d/,/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/]}
                             className="form-control"
+                            value={addresses[0].zip_code || ''}
                             placeholder="CEP"
                             guide={false}
                             id="zip_code"

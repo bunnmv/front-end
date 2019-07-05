@@ -5,7 +5,18 @@ import addressService from '../../../services/address.service';
 import AddressCreate from '../../Address/AddressCreate'
 import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
-export default class UserCreate extends Component {
+import MaskedInput from 'react-text-mask'
+import moment from "moment";
+import 'moment/locale/pt-br'
+
+const ErrorMessage = () => (
+    <div className="error-message">
+        <p>CPF Inválido</p>
+    </div>
+);
+
+
+export default class UserEdit extends Component {
 
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
@@ -19,8 +30,8 @@ export default class UserCreate extends Component {
 
         this.onSubmit = this.onSubmit.bind(this);
 
-
         this.state = {
+            invalidCPF:false,
             user: {
                 name: '',
                 email: '',
@@ -29,7 +40,7 @@ export default class UserCreate extends Component {
             },
             phones:[{
                 mobile:'',
-                home:'',
+                home:''
             }],
             addresses:[{
                 zip_code: '',
@@ -74,33 +85,101 @@ export default class UserCreate extends Component {
         });
     }
 
+    testCPF = (e) => {
+        let cpf = e.replace(/[^\d]/g, "");
+        let sum;
+        let remainder;
+        sum = 0;
+        if (cpf === '00000000000') return false;
+        if (cpf === '11111111111') return false;
+        if (cpf === '22222222222') return false;
+        if (cpf === '33333333333') return false;
+        if (cpf === '44444444444') return false;
+        if (cpf === '55555555555') return false;
+        if (cpf === '66666666666') return false;
+        if (cpf === '77777777777') return false;
+        if (cpf === '88888888888') return false;
+        if (cpf === '99999999999') return false;
+
+        for (let i=1; i<=9; i++) sum = sum + parseInt(cpf.substring(i-1, i)) * (11 - i);
+        remainder = (sum * 10) % 11;
+
+        if ((remainder === 10) || (remainder === 11))  remainder = 0;
+        if (remainder !== parseInt(cpf.substring(9, 10)) ) return false;
+        sum = 0;
+        for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpf.substring(i-1, i)) * (12 - i);
+        remainder = (sum * 10) % 11;
+
+        if ((remainder === 10) || (remainder === 11))  remainder = 0;
+        return remainder === parseInt(cpf.substring(10, 11));
+    };
     onChangeUserCPF(e) {
-        this.setState({
-            user: {
-                ...this.state.user,
-                cpf: e.target.value
+        if(e.target.value.length === 14){
+            if(this.testCPF(e.target.value)){
+                this.setState({
+                    invalidCPF:false,
+                    user: {
+                        ...this.state.user,
+                        cpf: e.target.value // cpf is valid
+                    }
+                });
+            } else {
+                this.setState({invalidCPF:true});
             }
-        });
+        } else {
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    cpf: e.target.value
+                }
+            });
+        }
     }
+
     onChangeUserBirthDate(e) {
-        this.setState({
-            user: {
-                ...this.state.user,
-                birth_date: e.target.value
-            }
-        });
+        if(e.target.value.length===10){ // 10 chars for date string dd/mm/yyyy
+            let parts = e.target.value.split('/');
+            let day = parts[0];
+            let aux_number_day = Number(day)+1; // date hast to increase by one because index starts with 0
+            aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
+            const birth_date = parts[2] + '-' + parts[1] + '-' + day;
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    birth_date: birth_date
+                }
+            });
+        } else {
+            this.setState({
+                user: {
+                    ...this.state.user,
+                    birth_date: e.target.value
+                }
+            });
+        }
     }
 
     handlePhoneChange(phones){
         this.setState({
-            phones: phones,
+            ...this.state.phones,
+            phones: phones
         });
     }
 
     handleAddressChange(addresses){
         this.setState({
-            addresses: addresses,
+            addresses: addresses
         });
+    }
+
+    checkCPFMessage() {
+        if(this.state.invalidCPF){
+            return <ErrorMessage/>
+        }
+    }
+
+    checkDisabledForm(){
+        return this.state.invalidCPF;
     }
 
     onSubmit(e) {
@@ -126,7 +205,7 @@ export default class UserCreate extends Component {
             <div className="user-create-component">
                 <div className="row justify-content-center">
                     <div className="col-sm-8 ">
-                        <h3>Novo Usuário</h3>
+                        <h3>Editar Usuário <small>{this.state.user.name}</small></h3>
                         <div className="card card-user">
                             <div className="card-body">
                                 <form onSubmit={this.onSubmit}>
@@ -134,6 +213,7 @@ export default class UserCreate extends Component {
                                         <label>Nome: </label>
                                         <input
                                             type="text"
+                                            placeholder="Nome"
                                             className="form-control"
                                             value={this.state.user.name || ''}
                                             onChange={this.onChangeUserName}
@@ -144,33 +224,40 @@ export default class UserCreate extends Component {
                                         <input
                                             type="email"
                                             className="form-control"
+                                            placeholder="email@email.com"
                                             value={this.state.user.email || ''}
                                             onChange={this.onChangeUserEmail}
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>CPF: </label>
-                                        <input
-                                            type="text"
+                                        <MaskedInput
+                                            mask={[ /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
                                             className="form-control"
+                                            placeholder="Insira um CPF válido"
+                                            guide={false}
+                                            id="cpf"
                                             value={this.state.user.cpf || ''}
                                             onChange={this.onChangeUserCPF}
                                         />
+                                        { this.checkCPFMessage() }
                                     </div>
                                     <div className="form-group">
                                         <label>Data de Nascimento: </label>
-                                        <input
-                                            type="date"
+                                        <MaskedInput
+                                            mask={[ /\d/, /[1-9]/,'/',/\d/,/[1-9]/,'/', /[1-9]/,/\d/,/\d/,/\d/]}
                                             className="form-control"
-                                            value={this.state.user.birth_date || ''}
+                                            placeholder="dia/mês/ano"
+                                            guide={false}
+                                            id="birth_date"
+                                            value={moment(this.state.user.birth_date).locale('pt-br').format('L') || ''}
                                             onChange={this.onChangeUserBirthDate}
                                         />
                                     </div>
-                                    {/* Pass handlers and values*/}
                                     <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
                                     <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
-                                        <input type="submit" value="Salvar" className="btn btn-primary" />
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Edições" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>

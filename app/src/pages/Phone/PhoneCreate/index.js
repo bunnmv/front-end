@@ -19,7 +19,8 @@ export default class PhoneCreate extends Component {
     }
 
     render() {
-        const phones = this.props.phones;
+        const phones = this.props.phones? this.props.phones: [{}];
+        console.log('PHONES',phones);
         return (
             <div>
                 <div className="address-title">
@@ -28,35 +29,25 @@ export default class PhoneCreate extends Component {
                 <div className="row">
                     <div className="form-group col-sm-6">
                         <label>Celular: </label>
-                        {/*<input*/}
-                        {/*    type="text"*/}
-                        {/*    className="form-control"*/}
-                        {/*    value={phones[0].number || ''}*/}
-                        {/*    onChange={this.onChangePhoneNumber}*/}
-                        {/*/>*/}
                         <MaskedInput
                             mask={['(',/[1-9]/,/[1-9]/,')', ' ', /[1-9]/,' ',/[1-9]/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
                             className="form-control"
-                            placeholder="(48) 9 9654-8776"
+                            placeholder="Ex:(48) 9 9654-8776"
                             guide={false}
                             id="mobile"
+                            value={phones[0].mobile || ''}
                             onChange={this.onChangePhoneNumberMobile}
                         />
                     </div>
                     <div className="form-group col-sm-6">
                         <label>Residencial: </label>
-                        {/*<input*/}
-                        {/*    type="text"*/}
-                        {/*    className="form-control"*/}
-                        {/*    value={phones[0].number || ''}*/}
-                        {/*    onChange={this.onChangePhoneNumber}*/}
-                        {/*/>*/}
                         <MaskedInput
                             mask={['(',/[1-9]/,/[1-9]/,')',' ',/[1-9]/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
                             className="form-control"
-                            placeholder="(48) 3443-8776"
+                            placeholder="Ex:(48) 3443-8776"
                             guide={false}
                             id="home"
+                            value={phones[0].home || ''}
                             onChange={this.onChangePhoneNumberHome}
                         />
                     </div>

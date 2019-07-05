@@ -29,7 +29,7 @@ export default class UserCreate extends Component {
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
-            cpfInvalid:false,
+            invalidCPF:false,
             user: {
                 name: '',
                 email: '',
@@ -38,7 +38,7 @@ export default class UserCreate extends Component {
             },
             phones:[{
                 mobile:'',
-                home:'',
+                home:''
             }],
             addresses:[{
                 zip_code: '',
@@ -101,7 +101,6 @@ export default class UserCreate extends Component {
     onChangeUserCPF(e) {
         if(e.target.value.length === 14){
             if(this.testCPF(e.target.value)){
-                console.log('valid');
                 this.setState({
                     invalidCPF:false,
                     user: {
@@ -111,7 +110,6 @@ export default class UserCreate extends Component {
                 });
             } else {
                 this.setState({invalidCPF:true});
-                console.log('not valid');
             }
         } else {
             this.setState({
@@ -126,12 +124,10 @@ export default class UserCreate extends Component {
     onChangeUserBirthDate(e) {
         if(e.target.value.length===10){ // 10 chars for date string dd/mm/yyyy
             let parts = e.target.value.split('/');
-            console.log('parts',parts);
             let day = parts[0];
             let aux_number_day = Number(day)+1; // date hast to increase by one because index starts with 0
             aux_number_day > 9? day = String(aux_number_day): day = '0'+String(aux_number_day);
             const birth_date = parts[2] + '-' + parts[1] + '-' + day;
-            console.log('birth_date',birth_date);
             this.setState({
                 user: {
                     ...this.state.user,
@@ -150,18 +146,17 @@ export default class UserCreate extends Component {
 
     handlePhoneChange(phones){
         this.setState({
-            phones: phones,
+            phones: phones
         });
     }
 
     handleAddressChange(addresses){
         this.setState({
-            addresses: addresses,
+            addresses: addresses
         });
     }
 
     checkCPFMessage() {
-        console.log(this.state);
         if(this.state.invalidCPF){
             return <ErrorMessage/>
         }
@@ -177,17 +172,15 @@ export default class UserCreate extends Component {
         userService.createUser({user: this.state.user}).then((res) => {
             console.log('NEW USER',res.data);
             const userID = res.data.user.id;
-            phoneService.createPhone(userID,{phone:this.state.phones[0]}).then((res) => {
+            if(this.state.phones[0].home!==''|| this.state.phones[0].mobile !=='') phoneService.createPhone(userID,{phone:this.state.phones[0]}).then((res) => {
                 console.log('NEW PHONE',res.data);
             }).catch(err => console.log(err));
-            addressService.createAddress(userID,{address:this.state.addresses[0]}).then((res) => {
+            if(this.state.addresses[0].zip_code!=='') addressService.createAddress(userID,{address:this.state.addresses[0]}).then((res) => {
                 console.log('NEW ADDRESS',res.data);
             }).catch(err => console.log(err));
+            this.props.history.push('/'); // redirect back to user list
         }).catch(err => console.log(err));
-
-        this.props.history.push('/'); // redirect back to user list
     }
-
 
     render() {
         const phones = this.state.phones;
@@ -222,40 +215,29 @@ export default class UserCreate extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label>CPF: </label>
-                                        {/*<input*/}
-                                        {/*    type="text"*/}
-                                        {/*    className="form-control"*/}
-                                        {/*    value={this.state.user.cpf || ''}*/}
-                                        {/*    onChange={this.onChangeUserCPF}*/}
-                                        {/*/>*/}
                                         <MaskedInput
                                             mask={[ /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
                                             className="form-control"
                                             placeholder="Insira um CPF válido"
                                             guide={false}
                                             id="cpf"
+                                            value={this.state.user.cpf || ''}
                                             onChange={this.onChangeUserCPF}
                                         />
                                         { this.checkCPFMessage() }
                                     </div>
                                     <div className="form-group">
                                         <label>Data de Nascimento: </label>
-                                        {/*<input*/}
-                                        {/*    type="date"*/}
-                                        {/*    className="form-control"*/}
-                                        {/*    value={this.state.user.birth_date || ''}*/}
-                                        {/*    onChange={this.onChangeUserBirthDate}*/}
-                                        {/*/>*/}
                                         <MaskedInput
                                             mask={[ /\d/, /[1-9]/,'/',/\d/,/[1-9]/,'/', /[1-9]/,/\d/,/\d/,/\d/]}
                                             className="form-control"
-                                            placeholder="dia/mês/ano"
+                                            placeholder="Ex: Dia/Mês/Ano"
                                             guide={false}
                                             id="birth_date"
+                                            value={this.state.user.birth_date || ''}
                                             onChange={this.onChangeUserBirthDate}
                                         />
                                     </div>
-                                    {/* Pass handlers and values*/}
                                     <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
                                     <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
