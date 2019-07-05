@@ -49,14 +49,14 @@ export default class PhoneList extends Component {
         }).catch(err => console.log(err));
     };
 
-    phoneList() {
+    phoneList(user) {
         return this.state.phonesList.length && this.state.phonesList.map((phone,index) => (
             <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{phone.number}</td>
                 <td>{phone.type === "MOBILE"? 'Celular': 'Residencial'}</td>
                 <td className="row ops-row">
-                    <Link to={"/phone/edit/"+phone.id}>Editar</Link>
+                    <Link to={"/user/"+user+"/phone/edit/"+phone.id+""}>Editar</Link>
                     <button className="link-button" onClick={() => {this.onRemoveClick(phone.id)}}>Apagar</button>
                 </td>
             </tr>
@@ -88,7 +88,7 @@ export default class PhoneList extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                { this.phoneList() }
+                                { this.phoneList(user) }
                                 </tbody>
                             </table>
                         </div>

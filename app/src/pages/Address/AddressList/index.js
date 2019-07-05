@@ -48,7 +48,7 @@ export default class AddressList extends Component {
         }).catch(err => console.log(err));
     };
 
-    addressList() {
+    addressList(user) {
         return this.state.addressList.length && this.state.addressList.map((address,index) => (
             <tr key={index}>
                 <th scope="row">{index + 1}</th>
@@ -59,7 +59,7 @@ export default class AddressList extends Component {
                 <td>{address.state}</td>
                 <td>{address.zip_code}</td>
                 <td className="row ops-row">
-                    <Link to={"/address/edit/"+address.id}>Editar</Link>
+                    <Link to={"/user/"+user+"/address/edit/"+address.id +""}>Editar</Link>
                     <button className="link-button" onClick={() => {this.onRemoveClick(address.id)}}>Apagar</button>
                 </td>
             </tr>
@@ -95,7 +95,7 @@ export default class AddressList extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                { this.addressList() }
+                                { this.addressList(user) }
                                 </tbody>
                             </table>
                         </div>

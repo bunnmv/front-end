@@ -8,6 +8,8 @@ import AddressList from './pages/Address/AddressList';
 import AddressCreate from './pages/Address/AddressCreate';
 import PhoneCreate from './pages/Phone/PhoneCreate';
 import logo from './assets/logo.png';
+import PhoneEdit from "./pages/Phone/PhoneEdit";
+import AddressEdit from "./pages/Address/AddressEdit";
 
 const Routes = () => (
     <BrowserRouter>
@@ -35,6 +37,8 @@ const Routes = () => (
             <Route path="/user/create" component={UserCreate}/>
             <Route path="/user/:user/address/create" component={AddressCreate}/>
             <Route path="/user/:user/phone/create" component={PhoneCreate}/>
+            <Route path="/user/:user/address/edit/id" component={AddressEdit}/>
+            <Route path="/user/:user/phone/edit/id" component={PhoneEdit}/>
             <Route path="/user/:user/address/list" component={AddressList}/>
             <Route path="/user/:user/phone/list" component={PhoneList}/>
         </Switch>
