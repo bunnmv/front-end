@@ -1,55 +1,129 @@
 import React, { Component } from 'react';
 import './styles.css';
 import MaskedInput from "react-text-mask";
-export default class PhoneCreate extends Component {
+import phoneService from "../../../services/phone.service";
 
+
+export default class PhoneCreate extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
-        this.onChangePhoneNumberMobile = this.onChangePhoneNumberMobile.bind(this);// binds the function to the class
-        this.onChangePhoneNumberHome = this.onChangePhoneNumberHome.bind(this);// binds the function to the class
+        this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this);// binds the function to the class
+        this.onChangePhoneType = this.onChangePhoneType.bind(this);// binds the function to the class
+        this.onSubmit = this.onSubmit.bind(this);
+        this.state = {
+            phone:{
+                number:'',
+                type:''
+            }
+        };
     }
-    onChangePhoneNumberMobile(e) {
-        this.props.phones[0].mobile = e.target.value;
-        this.props.onPhoneChange(this.props.phones);
+    onChangePhoneNumber(e) {
+        this.setState({
+            phone: {
+                ...this.state.phone,
+                number: e.target.value
+            }
+        });
+        console.log(this.state);
     }
 
-    onChangePhoneNumberHome(e) {
-        this.props.phones[0].home = e.target.value;
-        this.props.onPhoneChange(this.props.phones);
+    onChangePhoneType(e) {
+        this.setState({
+            phone: {
+                ...this.state.phone,
+                type: e.target.value
+            }
+        });
+        console.log(this.state);
+    }
+
+    phoneNumberType(){
+        if (this.state.phone.type === 'MOBILE'){
+            return (
+                <div className="form-group ">
+                    <label>Celular: </label>
+                    <MaskedInput
+                        mask={['(', /[1-9]/, /[1-9]/, ')', ' ', /[1-9]/, ' ', /[1-9]/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                        className="form-control"
+                        placeholder="Ex:(48) 9 9654-8776"
+                        guide={false}
+                        value={this.state.phone.number || ''}
+                        onChange={this.onChangePhoneNumber}
+                    />
+                </div>
+            )
+        } else {
+            return (
+                <div className="form-group">
+                    <label>Residencial: </label>
+                    <MaskedInput
+                        mask={['(', /[1-9]/, /[1-9]/, ')', ' ', /[1-9]/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                        className="form-control"
+                        placeholder="Ex:(48) 3443-8776"
+                        guide={false}
+                        value={this.state.phone.number || ''}
+                        onChange={this.onChangePhoneNumber}
+                    />
+                </div>
+            )
+        }
+    }
+
+    checkDisabledForm(){
+        return this.state.phone.number === '' || this.state.phone.type === '';
+    }
+
+    onSubmit(e) {
+        e.preventDefault(); // prevents form from redirecting
+        console.log('Form submitted:', this.state);
+        const user = this.props.match.params.user; // User ID from router params
+        phoneService.createPhone(user,this.state).then((res) => {
+            console.log('NEW PHONE',res.data);
+            this.props.history.push('/user/'+user+'/phone/list'); // redirect back to user list
+        }).catch(err => console.log(err));
     }
 
     render() {
-        const phones = this.props.phones? this.props.phones: [{}];
-        console.log('PHONES',phones);
         return (
             <div>
-                <div className="address-title">
-                    <h4>Telefones</h4>
-                </div>
-                <div className="row">
-                    <div className="form-group col-sm-6">
-                        <label>Celular: </label>
-                        <MaskedInput
-                            mask={['(',/[1-9]/,/[1-9]/,')', ' ', /[1-9]/,' ',/[1-9]/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
-                            className="form-control"
-                            placeholder="Ex:(48) 9 9654-8776"
-                            guide={false}
-                            id="mobile"
-                            value={phones[0].mobile || ''}
-                            onChange={this.onChangePhoneNumberMobile}
-                        />
-                    </div>
-                    <div className="form-group col-sm-6">
-                        <label>Residencial: </label>
-                        <MaskedInput
-                            mask={['(',/[1-9]/,/[1-9]/,')',' ',/[1-9]/,/\d/,/\d/,/\d/,'-',/\d/,/\d/,/\d/,/\d/]}
-                            className="form-control"
-                            placeholder="Ex:(48) 3443-8776"
-                            guide={false}
-                            id="home"
-                            value={phones[0].home || ''}
-                            onChange={this.onChangePhoneNumberHome}
-                        />
+                <div className="row justify-content-center">
+                    <div className="col-sm-8 ">
+                        <h3>Novo Telefone</h3>
+                        <div className="card card-phone">
+                            <div className="card-body">
+                                <form onSubmit={this.onSubmit}>
+                                    <label>Tipo do telefone: </label>
+                                    <div className="form-group">
+                                        <div className="form-check form-check-inline">
+                                            <input  className="form-check-input"
+                                                    type="radio"
+                                                    name="priorityOptions"
+                                                    id="priorityLow"
+                                                    value="MOBILE"
+                                                    checked={this.state.phone.type==='MOBILE'}
+                                                    onChange={this.onChangePhoneType}
+                                            />
+                                            <label className="form-check-label">Celular</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input  className="form-check-input"
+                                                    type="radio"
+                                                    name="priorityOptions"
+                                                    id="priorityMedium"
+                                                    value="HOME"
+                                                    checked={this.state.phone.type ==='HOME'}
+                                                    onChange={this.onChangePhoneType}
+                                            />
+                                            <label className="form-check-label">Residencial</label>
+                                        </div>
+                                    </div>
+                                    {this.phoneNumberType()}
+                                    <div className="form-group">
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Criar Telefone" className="btn btn-primary" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

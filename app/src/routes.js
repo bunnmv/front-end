@@ -3,6 +3,10 @@ import {BrowserRouter, Route, Switch,Link} from 'react-router-dom';
 import UserList from './pages/User/UserList';
 import UserCreate from './pages/User/UserCreate';
 import UserEdit from './pages/User/UserEdit';
+import PhoneList from './pages/Phone/PhoneList';
+import AddressList from './pages/Address/AddressList';
+import AddressCreate from './pages/Address/AddressCreate';
+import PhoneCreate from './pages/Phone/PhoneCreate';
 import logo from './assets/logo.png';
 
 const Routes = () => (
@@ -19,7 +23,7 @@ const Routes = () => (
                             <Link to="/" className="nav-link">Listar Usuários</Link>
                         </li>
                         <li className="navbar-item">
-                            <Link to="/create" className="nav-link">Novo Usuário</Link>
+                            <Link to="/user/create" className="nav-link">Novo Usuário</Link>
                         </li>
                     </ul>
                 </div>
@@ -28,7 +32,11 @@ const Routes = () => (
         <Switch>
             <Route path="/" exact component={UserList}/>
             <Route path="/user/edit/:id" component={UserEdit}/>
-            <Route path="/create" component={UserCreate}/>
+            <Route path="/user/create" component={UserCreate}/>
+            <Route path="/user/:user/address/create" component={AddressCreate}/>
+            <Route path="/user/:user/phone/create" component={PhoneCreate}/>
+            <Route path="/user/:user/address/list" component={AddressList}/>
+            <Route path="/user/:user/phone/list" component={PhoneList}/>
         </Switch>
         </div>
     </BrowserRouter>

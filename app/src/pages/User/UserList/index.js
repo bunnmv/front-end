@@ -7,7 +7,7 @@ import 'moment/locale/pt-br'
 const Message = () => (
     <div className="container message-container">
         <div className="row justify-content-center">
-            <h6>Oops... Nenhum usuário cadastrado. Clique <Link to={"/create"}>aqui</Link> para cadastrar um.</h6>
+            <h6>Oops... Nenhum usuário cadastrado. Clique <Link to={"/user/create"}>aqui</Link> para cadastrar um.</h6>
         </div>
     </div>
 );
@@ -50,6 +50,8 @@ export default class UserList extends Component {
                     <Link to={"/user/edit/"+user.id}>Editar</Link>
                     <button className="link-button" onClick={() => {this.onRemoveClick(user.id)}}>Apagar</button>
                 </td>
+                <td><Link to={"/user/"+user.id+"/phone/list/"}>Visualizar</Link></td>
+                <td><Link to={"/user/"+user.id+"/address/list/"}>Visualizar</Link></td>
             </tr>
         ))
     };
@@ -75,6 +77,8 @@ export default class UserList extends Component {
                                     <th scope="col">Data de Nascimento</th>
                                     <th scope="col">Adição no Sistema</th>
                                     <th scope="col">Operações</th>
+                                    <th scope="col">Telefones</th>
+                                    <th scope="col">Endereços</th>
                                 </tr>
                                 </thead>
                                 <tbody>

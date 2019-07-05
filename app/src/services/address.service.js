@@ -6,12 +6,17 @@ const api = axios.create({
 
 const addressService = {};
 
+addressService.getAddresses = (user) => {
+   return api.get(`user/${user}/address/list`);
+};
+
 addressService.createAddress = (user,params) => {
    return api.post(`user/${user}/address/create`, params);
 };
 addressService.editAddress = (user,id,params) => {
    return api.post(`user/${user}/address/edit/${id}`, params);
 };
+
 addressService.deleteAddress = (user,id) => {
    return api.post(`user/${user}/address/remove/${id}`);
 };

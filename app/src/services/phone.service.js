@@ -1,10 +1,15 @@
 import axios from 'axios';
+import addressService from "./address.service";
 
 const api = axios.create({
    baseURL: 'http://localhost:3000',
 });
 
 const phoneService = {};
+
+phoneService.getPhones = (user) => {
+   return api.get(`user/${user}/phone/list`);
+};
 
 phoneService.createPhone = (user,params) => {
    return api.post(`user/${user}/phone/create`, params);

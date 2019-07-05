@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import userService from '../../../services/user.service';
-import phoneService from '../../../services/phone.service';
-import addressService from '../../../services/address.service';
-import AddressCreate from '../../Address/AddressCreate'
-import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
 import MaskedInput from 'react-text-mask'
 
@@ -22,9 +18,6 @@ export default class UserCreate extends Component {
         this.onChangeUserEmail = this.onChangeUserEmail.bind(this);
         this.onChangeUserCPF = this.onChangeUserCPF.bind(this);
         this.onChangeUserBirthDate = this.onChangeUserBirthDate.bind(this);
-
-        this.handleAddressChange=this.handleAddressChange.bind(this);
-        this.handlePhoneChange=this.handlePhoneChange.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
 
@@ -143,19 +136,6 @@ export default class UserCreate extends Component {
             });
         }
     }
-
-    handlePhoneChange(phones){
-        this.setState({
-            phones: phones
-        });
-    }
-
-    handleAddressChange(addresses){
-        this.setState({
-            addresses: addresses
-        });
-    }
-
     checkCPFMessage() {
         if(this.state.invalidCPF){
             return <ErrorMessage/>
@@ -171,20 +151,10 @@ export default class UserCreate extends Component {
         console.log('Form submitted:', this.state);
         userService.createUser({user: this.state.user}).then((res) => {
             console.log('NEW USER',res.data);
-            const userID = res.data.user.id;
-            if(this.state.phones[0].home!==''|| this.state.phones[0].mobile !=='') phoneService.createPhone(userID,{phone:this.state.phones[0]}).then((res) => {
-                console.log('NEW PHONE',res.data);
-            }).catch(err => console.log(err));
-            if(this.state.addresses[0].zip_code!=='') addressService.createAddress(userID,{address:this.state.addresses[0]}).then((res) => {
-                console.log('NEW ADDRESS',res.data);
-            }).catch(err => console.log(err));
             this.props.history.push('/'); // redirect back to user list
         }).catch(err => console.log(err));
     }
-
     render() {
-        const phones = this.state.phones;
-        const addresses = this.state.addresses;
         return (
             <div className="user-create-component">
                 <div className="row justify-content-center">
@@ -238,8 +208,6 @@ export default class UserCreate extends Component {
                                             onChange={this.onChangeUserBirthDate}
                                         />
                                     </div>
-                                    <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
-                                    <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
                                         <input disabled={this.checkDisabledForm()} type="submit" value="Criar Usuário" className="btn btn-primary" />
                                     </div>
