@@ -16,4 +16,10 @@ userService.getUser = (id) => {
 userService.createUser = (params) => {
    return api.post('user/create', params);
 };
+userService.editUser = (id,params) => {
+    return api.post(`user/edit/${id}`, params);
+};
+userService.deleteUser = (id) => {
+    return api.post(`user/remove/${id}`);
+};
 export default userService;

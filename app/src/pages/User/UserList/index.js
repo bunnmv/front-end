@@ -4,24 +4,21 @@ import { Link } from 'react-router-dom';
 import moment from "moment";
 import 'moment/locale/pt-br'
 
-
-const User = props => (
-    <tr>
-        <th scope="row">{props.index + 1}</th>
-        <td>{props.user.name}</td>
-        <td>{props.user.email}</td>
-        <td>{props.user.cpf}</td>
-        <td>{moment(props.user.birth_date).locale('pt-br').format('L')}</td>
-        <td>{moment(props.user.date_added).locale('pt-br').format('LL')}</td>
-        <td className="row">
-            <Link className="col" to={"/user/edit/"+props.user.id}>Editar</Link>
-            <Link className="col" to={"/user/remove/"+props.user.id}>Apagar</Link>
-        </td>
-    </tr>
-);
-
 export default class UserList extends Component {
-    state = { userList: [{}] };
+    constructor(props) {
+        super(props); // creates the "this" to class and allow this.state
+        this.state = { userList: [{}] };
+        this.refreshList = this.refreshList.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
+    }
+
+    deleteUser(id){
+        console.log('delete', id);
+        userService.deleteUser(id).then((res) => {
+            console.log(res.data);
+        }).catch(err => console.log(err));
+    }
+
     componentDidMount(){
         this.refreshList();
     }
@@ -35,10 +32,23 @@ export default class UserList extends Component {
 
     userList() {
         return this.state.userList && this.state.userList.map((user,index) => (
-            <User user={user} index={index} key={index} />
+            <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.cpf}</td>
+                <td>{moment(user.birth_date).locale('pt-br').format('L')}</td>
+                <td>{moment(user.date_added).locale('pt-br').format('LL')}</td>
+                <td className="row">
+                    <Link className="col-6" to={"/user/edit/"+user.id}>Editar</Link>
+                    <a className="col-6" href="#" onClick={() => { this.deleteUser(user.id); this.refreshList();}}>Apagar</a>
+                </td>
+            </tr>
         ))
     }
+
     render() {
+
         return (
             <div className="row justify-content-center">
                 <div className="col-10">
@@ -63,7 +73,6 @@ export default class UserList extends Component {
                         </table>
                     </div>
                 </div>
-
             </div>
         )
     }
