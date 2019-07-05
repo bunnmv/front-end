@@ -24,7 +24,6 @@ export default class PhoneCreate extends Component {
                 number: e.target.value
             }
         });
-        console.log(this.state);
     }
 
     onChangePhoneType(e) {
