@@ -20,59 +20,6 @@ export default class AddressCreate extends Component {
             }
         }
     }
-
-    // // ... spread operator for Immutable state
-    // onChangeAddressZipCode(e) {
-    //     this.setState({
-    //         address: {
-    //             ...this.state.address,
-    //             zip_code: e.target.value
-    //         }
-    //     });
-    // }
-    //
-    // onChangeAddressStreet(e) {
-    //     this.setState({
-    //         address: {
-    //             ...this.state.user,
-    //             street: e.target.value
-    //         }
-    //     });
-    // }
-    //
-    // onChangeAddressNumber(e) {
-    //     this.setState({
-    //         address: {
-    //             ...this.state.address,
-    //             number: e.target.value
-    //         }
-    //     });
-    // }
-    // onChangeAddressCity(e) {
-    //     this.setState({
-    //         address: {
-    //             ...this.state.address,
-    //             city: e.target.value
-    //         }
-    //     });
-    // }
-    // onChangeAddressState(e) {
-    //     this.setState({
-    //         address: {
-    //             ...this.state.address,
-    //             state: e.target.value
-    //         }
-    //     });
-    // }
-    // onChangeAddressNeighborhood(e) {
-    //     this.setState({
-    //         address: {
-    //             ...this.state.address,
-    //             neighborhood: e.target.value
-    //         }
-    //     });
-    // }
-
     // ... spread operator for Immutable state
     onChangeAddressZipCode(e) {
         this.props.addresses[0].zip_code = e.target.value;

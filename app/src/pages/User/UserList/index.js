@@ -10,6 +10,7 @@ export default class UserList extends Component {
         this.state = { userList: [{}] };
         this.refreshList = this.refreshList.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.refreshList();
     }
 
     deleteUser(id){
@@ -19,13 +20,9 @@ export default class UserList extends Component {
         }).catch(err => console.log(err));
     }
 
-    componentDidMount(){
-        this.refreshList();
-    }
-
     refreshList = () => {
         userService.getUsers().then((res) => {
-            console.log(res.data);
+            console.log('User List',res.data);
             this.setState({ userList: res.data })
         }).catch(err => console.log(err));
     };

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import userService from '../../../services/user.service';
+import phoneService from '../../../services/phone.service';
+import addressService from '../../../services/address.service';
 import AddressCreate from '../../Address/AddressCreate'
+import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
+export default class UserCreate extends Component {
 
-export default class UserEdit extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
         this.onChangeUserName = this.onChangeUserName.bind(this); // binds the function to the class
@@ -11,14 +14,30 @@ export default class UserEdit extends Component {
         this.onChangeUserCPF = this.onChangeUserCPF.bind(this);
         this.onChangeUserBirthDate = this.onChangeUserBirthDate.bind(this);
 
+        this.handleAddressChange=this.handleAddressChange.bind(this);
+        this.handlePhoneChange=this.handlePhoneChange.bind(this);
+
         this.onSubmit = this.onSubmit.bind(this);
 
-        this.state = { user: {
+
+        this.state = {
+            user: {
                 name: '',
                 email: '',
                 birth_date: '',
                 cpf:''
-            }
+            },
+            phones:[{
+                number:''
+            }],
+            addresses:[{
+                zip_code: '',
+                street: '',
+                number: '',
+                city:'',
+                state:'',
+                neighborhood:''
+            }]
         }
     }
 
@@ -29,9 +48,10 @@ export default class UserEdit extends Component {
 
     getUser = (id) => {
         userService.getUser(id).then((res) => {
-            console.log(res.data);
-            this.setState({ user: res.data.user })
+            console.log('User',res.data);
+            this.setState({user:res.data.user,addresses:res.data.addresses,phones:res.data.phones});
         }).catch(err => console.log(err));
+
     };
 
     // ... spread operator for Immutable state
@@ -70,20 +90,42 @@ export default class UserEdit extends Component {
         });
     }
 
+    handlePhoneChange(phones){
+        this.setState({
+            phones: phones,
+        });
+    }
+
+    handleAddressChange(addresses){
+        this.setState({
+            addresses: addresses,
+        });
+    }
+
     onSubmit(e) {
         e.preventDefault(); // prevents form from redirecting
         console.log('Form submitted:', this.state);
-        userService.createUser(this.state).then((res) => {
-            console.log(res.data);
+        userService.editUser(this.state.user.id,{user: this.state.user}).then((res) => {
+            console.log('EDIT USER',res.data);
+            phoneService.editPhone(this.state.user.id,this.state.phones[0].id,{phone:this.state.phones[0]}).then((res) => {
+                console.log('EDIT PHONE',res.data);
+            }).catch(err => console.log(err));
+            addressService.editAddress(this.state.user.id,this.state.addresses[0].id,{address:this.state.addresses[0]}).then((res) => {
+                console.log('EDIT ADDRESS',res.data);
+            }).catch(err => console.log(err));
         }).catch(err => console.log(err));
+
+        this.props.history.push('/'); // redirect back to user list
     }
 
     render() {
+        const phones = this.state.phones;
+        const addresses = this.state.addresses;
         return (
             <div className="user-create-component">
                 <div className="row justify-content-center">
                     <div className="col-sm-8 ">
-                        <h3>Editar Usuário <small>{this.state.user.name}</small></h3>
+                        <h3>Novo Usuário</h3>
                         <div className="card card-user">
                             <div className="card-body">
                                 <form onSubmit={this.onSubmit}>
@@ -124,9 +166,10 @@ export default class UserEdit extends Component {
                                         />
                                     </div>
                                     {/* Pass handlers and values*/}
-                                    <AddressCreate/>
+                                    <PhoneCreate phones={phones} onPhoneChange={this.handlePhoneChange}/>
+                                    <AddressCreate addresses={addresses} onAddressChange={this.handleAddressChange}/>
                                     <div className="form-group">
-                                        <input type="submit" value="Editar" className="btn btn-primary" />
+                                        <input type="submit" value="Salvar" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>
