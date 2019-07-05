@@ -5,6 +5,7 @@ import addressService from '../../../services/address.service';
 import AddressCreate from '../../Address/AddressCreate'
 import PhoneCreate from "../../Phone/PhoneCreate";
 import './styles.css';
+import MaskedInput from 'react-text-mask'
 export default class UserCreate extends Component {
 
     constructor(props) {
@@ -119,6 +120,7 @@ export default class UserCreate extends Component {
                                         <label>Nome: </label>
                                         <input
                                             type="text"
+                                            placeholder="Nome"
                                             className="form-control"
                                             value={this.state.user.name || ''}
                                             onChange={this.onChangeUserName}
@@ -129,25 +131,42 @@ export default class UserCreate extends Component {
                                         <input
                                             type="email"
                                             className="form-control"
+                                            placeholder="email@email.com"
                                             value={this.state.user.email || ''}
                                             onChange={this.onChangeUserEmail}
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>CPF: </label>
-                                        <input
-                                            type="text"
+                                        {/*<input*/}
+                                        {/*    type="text"*/}
+                                        {/*    className="form-control"*/}
+                                        {/*    value={this.state.user.cpf || ''}*/}
+                                        {/*    onChange={this.onChangeUserCPF}*/}
+                                        {/*/>*/}
+                                        <MaskedInput
+                                            mask={[ /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
                                             className="form-control"
-                                            value={this.state.user.cpf || ''}
+                                            placeholder="Insira um CPF válido"
+                                            guide={false}
+                                            id="cpf"
                                             onChange={this.onChangeUserCPF}
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>Data de Nascimento: </label>
-                                        <input
-                                            type="date"
+                                        {/*<input*/}
+                                        {/*    type="date"*/}
+                                        {/*    className="form-control"*/}
+                                        {/*    value={this.state.user.birth_date || ''}*/}
+                                        {/*    onChange={this.onChangeUserBirthDate}*/}
+                                        {/*/>*/}
+                                        <MaskedInput
+                                            mask={[ /\d/, /[1-9]/,'/',/\d/,/[1-9]/,'/', /[1-9]/,/\d/,/\d/,/\d/]}
                                             className="form-control"
-                                            value={this.state.user.birth_date || ''}
+                                            placeholder="dia/mês/ano"
+                                            guide={false}
+                                            id="birth_date"
                                             onChange={this.onChangeUserBirthDate}
                                         />
                                     </div>

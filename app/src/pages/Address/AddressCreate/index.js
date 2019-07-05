@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './styles.css';
+import MaskedInput from 'react-text-mask'
 export default class AddressCreate extends Component {
 
     constructor(props) {
@@ -66,10 +67,18 @@ export default class AddressCreate extends Component {
                     </div>
                     <div className="form-group col-sm-2">
                         <label>Número: </label>
-                        <input
-                            type="text"
+                        {/*<input*/}
+                        {/*    type="text"*/}
+                        {/*    className="form-control"*/}
+                        {/*    value={addresses[0].number || ''}*/}
+                        {/*    onChange={this.onChangeAddressNumber}*/}
+                        {/*/>*/}
+                        <MaskedInput
+                            mask={[ /[1-9]/, /\d/,/\d/, /\d/, /\d/]}
                             className="form-control"
-                            value={addresses[0].number || ''}
+                            placeholder="N•"
+                            guide={false}
+                            id="number"
                             onChange={this.onChangeAddressNumber}
                         />
                     </div>
@@ -85,17 +94,6 @@ export default class AddressCreate extends Component {
                         />
                     </div>
                     <div className="form-group col-sm-6">
-                        <label>Bairro: </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={addresses[0].neighborhood || ''}
-                            onChange={this.onChangeAddressNeighborhood}
-                        />
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="form-group col-sm-8">
                         <label>Estado: </label>
                         <input
                             type="text"
@@ -104,12 +102,31 @@ export default class AddressCreate extends Component {
                             onChange={this.onChangeAddressState}
                         />
                     </div>
-                    <div className="form-group col-sm-4">
-                        <label>CEP: </label>
+                </div>
+                <div className="row">
+                    <div className="form-group col-sm-8">
+                        <label>Bairro: </label>
                         <input
                             type="text"
                             className="form-control"
-                            value={addresses[0].zip_code || ''}
+                            value={addresses[0].neighborhood || ''}
+                            onChange={this.onChangeAddressNeighborhood}
+                        />
+                    </div>
+                    <div className="form-group col-sm-4">
+                        <label>CEP: </label>
+                        {/*<input*/}
+                        {/*    type="text"*/}
+                        {/*    className="form-control"*/}
+                        {/*    value={addresses[0].zip_code || ''}*/}
+                        {/*    onChange={this.onChangeAddressZipCode}*/}
+                        {/*/>*/}
+                        <MaskedInput
+                            mask={[ /\d/, /\d/,/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/]}
+                            className="form-control"
+                            placeholder="CEP"
+                            guide={false}
+                            id="zip_code"
                             onChange={this.onChangeAddressZipCode}
                         />
                     </div>
