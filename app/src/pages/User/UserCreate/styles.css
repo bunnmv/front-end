@@ -1,0 +1,11 @@
+.card-user{
+    box-shadow: 10px 10px 20px #e0e0e0;
+}
+
+.error-message{
+    text-align:center;
+    margin-top: 5px;
+    background-color: lightpink;
+    border-radius:10px;
+    color:red;
+}

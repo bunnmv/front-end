@@ -1,0 +1,27 @@
+.link-button{
+    border:none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: none;
+}
+.link-button:hover{
+    color: #0056b3;
+    text-decoration: underline;
+}
+.ops-row{
+    margin-right: 0;
+    margin-left: 0;
+}
+.ops-row .link-button{
+    margin-left: 1em;
+}
+
+.message-container{
+    font-size: 14px;
+    margin-top: 10%;
+}
+
+.new-phone-link{
+    padding-top: 10px;
+}
