@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './styles.css';
 import { Link } from 'react-router-dom';
 import addressService from "../../../services/address.service";
+import userService from "../../../services/user.service";
 
 const Message = (props) => (
     <div className="container message-container">
@@ -13,17 +14,26 @@ const Message = (props) => (
 export default class AddressList extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
-        this.state = {addressList: []};
+        this.state = {userDB:{},addressList: []};
         this.refreshList = this.refreshList.bind(this);
         this.deleteAddress = this.deleteAddress.bind(this);
+        this.getUserFromDB();
         this.refreshList();
     }
     componentDidMount() {
 
     }
 
+    getUserFromDB = () => {
+        const user = this.props.match.params.user; // User ID from router params
+        userService.getUser(user).then((res) => {
+            console.log('User',res.data);
+            this.setState({ userDB: res.data});
+        }).catch(err => console.log(err));
+    };
+
     deleteAddress(id){
-        let user = 1; // todo fix
+        const user =this.props.match.params.user; // User ID from router params
         addressService.deleteAddress(user,id).then((res) => {
             console.log(res.data);
             this.refreshList();
@@ -67,7 +77,7 @@ export default class AddressList extends Component {
                 <div className="row justify-content-center">
                     <div className="col-10">
                         <div className="row">
-                            <h3 className="col-sm-10">Endereços Cadastrados de <small> nome do usuario </small></h3>
+                            <h3 className="col-sm-10">Endereços Cadastrados de <small> {this.state.userDB.name}</small></h3>
                             <Link className="new-phone-link" to={"/user/"+user+"/address/create"}>Novo Endereço</Link>
                         </div>
                         <div className="card">
@@ -81,6 +91,7 @@ export default class AddressList extends Component {
                                     <th scope="col">Cidade</th>
                                     <th scope="col">Estado</th>
                                     <th scope="col">CEP</th>
+                                    <th scope="col">Operações</th>
                                 </tr>
                                 </thead>
                                 <tbody>

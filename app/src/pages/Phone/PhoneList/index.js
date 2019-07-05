@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './styles.css';
 import { Link } from 'react-router-dom';
 import phoneService from "../../../services/phone.service";
+import userService from "../../../services/user.service";
 
 const Message = (props) => (
     <div className="container message-container">
@@ -13,10 +14,12 @@ const Message = (props) => (
 export default class PhoneList extends Component {
     constructor(props) {
         super(props); // creates the "this" to class and allow this.state
-        this.state = {phonesList: []};
+        this.state = {userDB:{},phonesList: []};
         this.refreshList = this.refreshList.bind(this);
         this.deletePhone = this.deletePhone.bind(this);
+        this.getUserFromDB();
         this.refreshList();
+
     }
     componentDidMount() {
 
@@ -29,6 +32,14 @@ export default class PhoneList extends Component {
             this.refreshList();
         }).catch(err => console.log(err));
     }
+
+    getUserFromDB = () => {
+        const user = this.props.match.params.user; // User ID from router params
+        userService.getUser(user).then((res) => {
+            console.log('User',res.data);
+            this.setState({ userDB: res.data});
+        }).catch(err => console.log(err));
+    };
 
     refreshList = () => {
         const user = this.props.match.params.user; // User ID from router params
@@ -63,7 +74,7 @@ export default class PhoneList extends Component {
                 <div className="row justify-content-center">
                     <div className="col-10">
                         <div className="row">
-                            <h3 className="col-sm-10">Telefones Cadastrados de <small> nome do usuario </small></h3>
+                            <h3 className="col-sm-10">Telefones Cadastrados de <small> {this.state.userDB.name}</small></h3>
                             <Link className="new-phone-link" to={"/user/"+user+"/phone/create"}>Novo Telefone</Link>
                         </div>
                         <div className="card">
