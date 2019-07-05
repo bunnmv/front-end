@@ -119,7 +119,7 @@ export default class PhoneCreate extends Component {
                                     </div>
                                     {this.phoneNumberType()}
                                     <div className="form-group">
-                                        <input disabled={this.checkDisabledForm()} type="submit" value="Criar Telefone" className="btn btn-primary" />
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Telefone" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>

@@ -209,7 +209,7 @@ export default class UserCreate extends Component {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <input disabled={this.checkDisabledForm()} type="submit" value="Criar Usuário" className="btn btn-primary" />
+                                        <input disabled={this.checkDisabledForm()} type="submit" value="Salvar Usuário" className="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>

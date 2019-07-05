@@ -85,7 +85,7 @@ export default class PhoneList extends Component {
                 </div>
             )
         } else {
-            return <Message user={this.props.match.params.user}/>// User ID from router params}/>
+            return <Message user={user}/>// User ID from router params}/>
         }
     }
 }

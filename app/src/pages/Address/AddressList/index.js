@@ -3,10 +3,10 @@ import './styles.css';
 import { Link } from 'react-router-dom';
 import addressService from "../../../services/address.service";
 
-const Message = () => (
+const Message = (props) => (
     <div className="container message-container">
         <div className="row justify-content-center">
-            <h6>Oops... Nenhum endereço cadastrado. Clique <Link to={"/address/create"}>aqui</Link> para cadastrar um.</h6>
+            <h6>Oops... Nenhum endereço cadastrado. Clique <Link to={"/user/"+props.user+"/address/create"}>aqui</Link> para cadastrar um.</h6>
         </div>
     </div>
 );
@@ -61,11 +61,15 @@ export default class AddressList extends Component {
     };
 
     render() {
+        const user = this.props.match.params.user;
         if(this.state.addressList.length){
             return (
                 <div className="row justify-content-center">
                     <div className="col-10">
-                        <h3>Endereços Cadastrados de <small> nome do usuario </small></h3>
+                        <div className="row">
+                            <h3 className="col-sm-10">Endereços Cadastrados de <small> nome do usuario </small></h3>
+                            <Link className="new-phone-link" to={"/user/"+user+"/address/create"}>Novo Endereço</Link>
+                        </div>
                         <div className="card">
                             <table className="table table-striped">
                                 <thead>
@@ -88,7 +92,7 @@ export default class AddressList extends Component {
                 </div>
             )
         } else {
-            return <Message/>
+            return <Message user={user}/>
         }
     }
 }
